@@ -4,6 +4,6 @@
         "moduleResolution": "Node",
         "strict": true
     },
-    "include": ["./typechain-types", "./test"],
+    "include": ["./typechain-types", "./test", "./scripts"],
     "files": ["./hardhat.config.ts"]
 }
