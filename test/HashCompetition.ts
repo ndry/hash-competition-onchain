@@ -3,7 +3,7 @@ import { assert, expect } from "chai";
 import { ethers as ethersPlugin } from "hardhat";
 import { ethers } from "ethers";
 import { HashCompetition__factory } from "../typechain-types/factories/HashCompetition__factory";
-import { scoreSolution, xorBytes } from "./utils";
+import { scoreSolution, xorBytes } from "../scripts/utils";
 import { HashCompetition } from "../typechain-types";
 
 import BytesLike = ethers.BytesLike;
@@ -27,13 +27,13 @@ describe("HashCompetition contract", () => {
 
     const betterWorseSolution = (task: string) => {
         const _scoreSolution = scoreSolution(hashCompetition.address);
-    
+
         const solution1 = "0x0000000000000000000000000000000000000000000000000000000000000001";
         const solution2 = "0x0000000000000000000000000000000000000000000000000000000000000002";
 
         return _scoreSolution(task, solution1) > _scoreSolution(task, solution2)
-                ? [solution1, solution2]
-                : [solution2, solution1];
+            ? [solution1, solution2]
+            : [solution2, solution1];
     }
 
     let hashCompetition: HashCompetition;
@@ -207,9 +207,9 @@ describe("HashCompetition contract", () => {
     it("accepts better solution submission", async () => {
         const _scoreSolution = scoreSolution(hashCompetition.address);
         const hashCompetition1 = hashCompetition.connect(await provider.getSigner(1));
-        
+
         await generateBlocks(3);
-        
+
         const task = await blockhashRel(1);
         const [betterSolution, worseSolution] = betterWorseSolution(task);
 
