@@ -38,29 +38,12 @@ contract HashCompetition {
         activeTasks[task].bank += msg.value;
         activeTasks[task].solutionClaims[solutionClaim] = msg.sender;
     }
-
-    function countFirstZeroBits(bytes32 x) public pure returns (uint) {
-        uint count = 0;
-        for (uint i = 0; i < 32; i++) {
-            uint8 b = uint8(x[i]);
-            if (b == 0) {
-                count += 8;
-            } else {
-                while (b < 0x80) {
-                    count += 1;
-                    b = (b << 1) + 1;
-                }
-                break;
-            }
-        }
-        return count;
-    }
     
     function scoreSolution(bytes32 task, bytes32 solution) public view returns (uint) {
         bytes32 solutionHash = keccak256(abi.encode(solution));
         bytes32 contractSpecificTask = task ^ keccak256(abi.encodePacked(address(this)));
-        bytes32 diff = solutionHash ^ contractSpecificTask;
-        return countFirstZeroBits(diff) + 1;
+        bytes32 diff = (solutionHash ^ contractSpecificTask);
+        return uint256(~diff);
     }
 
     function submitSolution(bytes32 task, bytes32 solution) external {

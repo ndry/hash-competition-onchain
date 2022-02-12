@@ -6,11 +6,14 @@ The author of the highest scored solution takes the bank.
 
 Every block within last N blocks is a manifestation of a task,
 and a hash of that block is a seed for that task.
-Task goal is task seed xored with contract address hash.
-The task is to find some uint256 whose hash xored against the task goal
-gives the highest number of leading zero bits -- the score:
+The task is to find some uint256 whose hash xored against the task goal gives the smallest nummber:
 
-`score = countFirstZeroBits(keccak256(solution) ^ (task ^ keccak256(address(this)))) + 1`
+```js
+let selectedBlock = some block within last N blocks
+let goal = selectedBlock.hash ^ keccak256(address(this)) // to make the goal specific for each contract instance
+let diff = keccak256(solution) ^ goal
+let score = uint256(~diff)
+```
 
 The interaction with the contract consists of three steps:
 
@@ -29,10 +32,10 @@ is eligible to receive the bank on `claimReward` call.
 Anyone can claim any amount of any solutions, 
 but has to provide bet amount for each claim.
 
-Should one secceed to reclaim others solution claim, 
-when the transaction was published, but not included into blockchain yet, 
+*Attack:* Should one secceed to reclaim other player's solution claim, 
+when the transaction was broadcasted, but not included into blockchain yet, 
 they would still need to provide the bet amount, 
-but will not be able to ever submit a solution.
+but will not be able to ever submit a solution (as they do not know it).
 Unfortunatelly, the original solution finder won't be able to claim that solution.
 
 ## Further research and development
@@ -51,4 +54,4 @@ to research the solution space mathematically, to develop euristics etc.
 
 So consider taking a single-player primitive but complex game,
 and giving individuals economic incentive to research it in permissionless manner,
-encouraging automation.
+embracing automation.

@@ -3,11 +3,11 @@ import { assert, expect } from "chai";
 import { ethers as ethersPlugin } from "hardhat";
 import { ethers } from "ethers";
 import { HashCompetition__factory } from "../typechain-types/factories/HashCompetition__factory";
-import { scoreSolution, xorBytes } from "../scripts/utils";
+import { scoreSolution, xor } from "../scripts/utils";
 import { HashCompetition } from "../typechain-types";
 
-import BytesLike = ethers.BytesLike;
-const { keccak256, arrayify, hexlify } = ethers.utils;
+import BigNumber = ethers.BigNumber;
+const { keccak256 } = ethers.utils;
 
 describe("HashCompetition contract", () => {
     const provider = ethersPlugin.provider;
@@ -31,7 +31,7 @@ describe("HashCompetition contract", () => {
         const solution1 = "0x0000000000000000000000000000000000000000000000000000000000000001";
         const solution2 = "0x0000000000000000000000000000000000000000000000000000000000000002";
 
-        return _scoreSolution(task, solution1) > _scoreSolution(task, solution2)
+        return _scoreSolution(task, solution1).gt(_scoreSolution(task, solution2))
             ? [solution1, solution2]
             : [solution2, solution1];
     }
@@ -49,34 +49,15 @@ describe("HashCompetition contract", () => {
         await generateBlocks(20);
     });
 
-    it("counts first zero bit", async () => {
-        const inputs = [
-            "0x0000000000000000000000000000000000000000000000000000000000000000",
-            "0x0000000000000000000000000000000000000000000000000000000000000030",
-            "0x00f0000000000000000000000000000000000000000000000000000000000000",
-            "0x0000044444444444444444444444444444444444444444444444444444444444",
-            "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-        ];
-
-        const results = await Promise.all(
-            inputs.map(async input => (await hashCompetition.countFirstZeroBits(input))));
-
-        expect(results[0]).equals(256);
-        expect(results[1]).equals(250);
-        expect(results[2]).equals(8);
-        expect(results[3]).equals(21);
-        expect(results[4]).equals(0);
-    })
-
     it("scores ideal solution", async () => {
         const zeros = "0x0000000000000000000000000000000000000000000000000000000000000000";
         const address = hashCompetition.address;
 
         const score = (await hashCompetition.scoreSolution(
-            xorBytes(keccak256(zeros), keccak256(address)),
+            xor(keccak256(zeros), keccak256(address)),
             zeros));
 
-        expect(score).equals(257);
+        expect(score).eq(BigNumber.from("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
     });
 
     it("scores solution correctly", async () => {
