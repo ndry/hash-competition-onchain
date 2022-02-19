@@ -22,7 +22,7 @@ one claims having a solution without revealing it,
 by sending the solution hash and the bet amount to `claimSolution`.
 
 2. While the task block is still within the last N block, 
-one reveils the solution itself by submitting it to `submitSolution`.
+one reveals the solution itself by submitting it to `submitSolution`.
 Only better than the current solution would be accepted.
 
 3. When the task block goes out of the last N blocks,
@@ -41,13 +41,13 @@ Unfortunatelly, the original solution finder won't be able to claim that solutio
 ## Further research and development
 
 HachCompetition alone is nothing more but a proof-of-work type race:
-start brutforcing, the more hashing power you own, the better your chances to win are.
+start bruteforcing, the more hashing power you own, the better your chances to win are.
 
 The interesting part comes in when scoring algorithm is something like 
 "take a seed, unpack it into a round of some single-player game,
 then take a sequence of moves as solution, emulate it, score it."
 Some games with pretty primitive rulesets exhibit quite complex gameplay. 
-A well-known examples are chess and Go (multiplayer, thought), or Game of Life (zero-player).
+A well-known examples are chess and Go (multiplayer, though), or Game of Life (zero-player).
 The thing is one cannot just find the optimal solution by brute force -
 the decision tree is exponentially wide and deep - one has to master the game,
 to research the solution space mathematically, to develop euristics etc.
