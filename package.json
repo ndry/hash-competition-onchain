@@ -5,7 +5,8 @@
     "test": "set NODE_OPTIONS=--openssl-legacy-provider && hardhat test",
     "coverage": "set NODE_OPTIONS=--openssl-legacy-provider && hardhat coverage",
     "ts": "set NODE_OPTIONS=--openssl-legacy-provider && ts-node --transpile-only",
-    "deploy-local": "hardhat run ./scripts/deploy.ts --network localhost"
+    "deploy-local": "hardhat run ./scripts/deploy.ts --network localhost",
+    "prepare": "hardhat compile"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.4",
