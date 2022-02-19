@@ -1,5 +1,5 @@
 {
-  "name": "@xplart/pow-onchain",
+  "name": "@xplart/hash-competition-onchain",
   "scripts": {
     "hardhat": "set NODE_OPTIONS=--openssl-legacy-provider && hardhat",
     "test": "set NODE_OPTIONS=--openssl-legacy-provider && hardhat test",
